@@ -6,9 +6,13 @@
 //
 
 #include <iostream>
+#include "line.h"
+using namespace std;
+using namespace line;
 
 int main(int argc, const char * argv[]) {
-    // insert code here...
-    std::cout << "Hello, World!\n";
-    return 0;
+    Point<int> a(1, 2);
+    Point<int> a1(11, 2);
+    cout << a << endl;
+    cout << calculate_len(a,a1) << endl;
 }
