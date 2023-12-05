@@ -55,5 +55,61 @@ namespace line {
         T x = distribution(generator);
         return x;
     }
+    template<typename T>
+    class BrokenLine {
+    private:
+        Point<T>* _data;
+        size_t _size;
+        const double eps = 0.000001;
+    public:
+        BrokenLine() : _data(nullptr), _size(0) {}
+        BrokenLine(Point<T>& other) : _data(new Point<T>), _size(1) {
+            _data[0] = Point<T>(other._x, other._y);
+        }
+        BrokenLine(size_t size) : _data(new Point<T>[size]), _size(size) {
+            for (size_t i = 0; i < _size; i++) {
+                _data[i] = Point<T>();
+            }
+        }
+        BrokenLine(size_t count, Point<T> m1, Point<T> m2) : _data(new Point<T>[count]), _size(count) {
+            for (size_t i = 0; i < _size; i++) {
+                _data[i] = Point<T>(random(m1._x, m2._x), random(m1._y, m2._y));
+            }
+        }
+        BrokenLine(const BrokenLine<T>& a) : _data(new Point<T>[a._size]), _size(a._size) {
+            for (size_t i = 0; i < _size; i++) {
+                _data[i] = a[i];
+            }
+        }
+        void swap(BrokenLine<T>& a) {
+            std::swap(_data, a._data);
+            std::swap(_size, a._size);
+        }
+        BrokenLine operator=(BrokenLine<T> a) {
+            swap(a);
+            return *this;
+        }
+        size_t size() {
+            return _size;
+        }
+        Point<T>& operator[](size_t index) const {
+            if (index >= _size) {
+                throw("all bad");
+            }
+            return _data[index];
+        }
+        BrokenLine operator+(const BrokenLine& temp) {
+            BrokenLine<T> result;
+            result._size = _size + temp._size;
+            result._data = new Point<T>[result._size];
+            for (size_t i = 0; i < _size; i++) {
+                result._data[i] = _data[i];
+            }
+            for (size_t i = 0; i < temp._size; i++) {
+                result._data[_size + i] = temp._data[i];
+            }
+            return result;
+        }
+    };
 }
 #endif /* line_h */
