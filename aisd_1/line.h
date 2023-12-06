@@ -110,6 +110,51 @@ namespace line {
             }
             return result;
         }
+        void push_back(const Point<T>& a) {
+            Point<T>* data = new Point<T>[_size+1];
+            for (size_t i = 0; i < _size; i++) {
+                data[i] = _data[i];
+            }
+            data[_size] = a;
+            delete[] _data;
+            _data = data;
+            _size++;
+        }
+        void push_front(const Point<T>& a) {
+            Point<T>* data = new Point<T>[_size + 1];
+            data[0] = a;
+            for (size_t i = 1; i < _size; i++) {
+                data[i] = _data[i-1];
+            }
+            delete[] _data;
+            _data = data;
+            _size++;
+        }
+        ~BrokenLine() {
+            delete[] _data;
+            _data = nullptr;
+            _size = 0;
+        }
+        double len_broken_line() {
+            double lenght = 0;
+            for (size_t i = 1; i < _size; i++)
+            {
+                lenght += calculate_len(_data[i], _data[i - 1]);
+            }
+            return lenght;
+        }
+        bool operator==(const BrokenLine<T>& a) const {
+            if (_size != a._size)
+                return false;
+            for (int i = 0; i < _size; ++i) {
+                if (fabs(_data[i] - a[i]) > eps)
+                    return false;
+            }
+        }
+        bool operator!=(const BrokenLine<T>& a) const {
+            return !(_data == a);
+        }
+
     };
 }
 #endif /* line_h */

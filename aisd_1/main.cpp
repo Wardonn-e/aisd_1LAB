@@ -19,4 +19,5 @@ int main(int argc, const char * argv[]) {
     Point<int> a2(8, 12);
     Point<int> b2(1, 17);
     BrokenLine c2(3, a2, b2);
+    cout << c2.len_broken_line() << endl;
 }
