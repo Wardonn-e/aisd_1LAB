@@ -156,5 +156,26 @@ namespace line {
         }
 
     };
+    template<typename T>
+    std::ostream& operator<<(std::ostream& os, BrokenLine<T>& a) {
+        for (size_t i = 0; i < a.size(); i++) {
+            os << a[i] << endl;
+        }
+        return os;
+    }
+    template<typename T>
+    void task1(T a, T b, T h) {
+        BrokenLine<T> line;
+        Point<T> A;
+        Point<T> B(a, 0);
+        Point<T> C(h, b);
+        Point<T> D(0, h);
+        line.push_back(A);
+        line.push_back(B);
+        line.push_back(C);
+        line.push_back(D);
+        line.push_back(A);
+        cout << line << endl;
+    }
 }
 #endif /* line_h */
