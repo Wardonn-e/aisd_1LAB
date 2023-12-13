@@ -23,6 +23,7 @@ namespace line {
         T _y;
         Point() : _x(T(0)), _y(T(0)) {}
         Point(T x, T y) : _x(x), _y(y) {}
+        Point(std::complex<T> x, std::complex<T> y) : _x(x), _y(y) {}
         void operator = (const Point<T>& a) {
             _x = a._x;
             _y = a._y;
@@ -36,7 +37,7 @@ namespace line {
     };
     template<typename U>
     double calculate_len(Point<complex<U>>& a, Point<complex<U>>& b) {
-        return fabs(sqrt(pow(a.get_x().real() - b.get_x().real(), 2) + pow(a.get_y().real() - b.get_y().real(), 2)));
+        return fabs(sqrt(pow(a._x.real() - b._x.real(), 2) + pow(a._y.real() - b._y.real(), 2)));
     }
     template<typename T>
     double calculate_len(Point<T>& a, Point<T>& b) {
@@ -55,6 +56,20 @@ namespace line {
         T x = distribution(generator);
         return x;
     }
+    template<typename T>
+    complex<T> random(complex<T> m1, complex<T> m2) {
+        std::random_device random_device;
+        std::mt19937 generator(random_device());
+        std::uniform_real_distribution<> real_distribution(m1.real(), m2.real());
+        std::uniform_real_distribution<> imag_distribution(m1.imag(), m2.imag());
+
+        T real_part = real_distribution(generator);
+        T imag_part = imag_distribution(generator);
+
+        return complex<T>(real_part, imag_part);
+    }
+
+
     template<typename T>
     class BrokenLine {
     private:
@@ -83,6 +98,12 @@ namespace line {
                 _data[i] = a[i];
             }
         }
+        BrokenLine(size_t count, Point<complex<T>> m1, Point<complex<T>> m2) : _data(new Point<complex<T>>[count]), _size(count) {
+            for (size_t i = 0; i < _size; i++) {
+                _data[i] = Point<complex<T>>(random(m1._x, m2._x), random(m1._y, m2._y));
+            }
+        }
+
         void swap(BrokenLine<T>& a) {
             std::swap(_data, a._data);
             std::swap(_size, a._size);
@@ -148,11 +169,15 @@ namespace line {
         bool operator==(const BrokenLine<T>& a) const {
             if (_size != a._size)
                 return false;
+            
             for (int i = 0; i < _size; ++i) {
-                if (fabs(_data[i] - a[i]) > eps)
+                if (abs(_data[i]._x - a[i]._x) > eps || abs(_data[i]._y - a[i]._y) > eps)
                     return false;
             }
+
+            return true;
         }
+
         bool operator!=(const BrokenLine<T>& a) const {
             return !(_data == a);
         }
