@@ -11,7 +11,7 @@
 #pragma once
 #include <iostream>
 #include <random>
-#include<complex>
+#include <complex>
 #include <cmath>
 
 using namespace std;
@@ -63,6 +63,8 @@ namespace line {
         const double eps = 0.000001;
     public:
         BrokenLine() : _data(nullptr), _size(0) {}
+        
+        
         BrokenLine(Point<T>& other) : _data(new Point<T>), _size(1) {
             _data[0] = Point<T>(other._x, other._y);
         }
